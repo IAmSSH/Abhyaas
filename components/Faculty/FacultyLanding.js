@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Dimensions, ImageBackground, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ImageBackground, TouchableOpacity, Image } from 'react-native';
 const { width: WIDTH } = Dimensions.get('window');
 import bgimage from '../Images/bg2.jpeg';
 import books from '../Images/books.png';
 import test from '../Images/test.png';
 import que from '../Images/quiz.png';
 import report from '../Images/report.png';
-//type Props = {};
+
 export default class FacultyLanding extends Component {
 
     handleCreateTest = () => {
@@ -21,6 +21,12 @@ export default class FacultyLanding extends Component {
         const { auth } = this.props.navigation.state.params;
 
         this.props.navigation.navigate("FacultyReportScreen", { db: db, auth: auth });
+    }
+
+    handleGetId = () => {
+        const { db } = this.props.navigation.state.params;
+
+        this.props.navigation.navigate("GetTestIdScreen", { db: db });
     }
 
     handleLogout = () => {
@@ -73,7 +79,7 @@ export default class FacultyLanding extends Component {
                 </View>
                 <View style={styles.btn}>
                     <View>
-                        <TouchableOpacity style={styles.op}>
+                        <TouchableOpacity style={styles.op} onPress={this.handleGetId}>
                             <Image
                                 style={styles.book1}
                                 source={que}
@@ -140,7 +146,6 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         backgroundColor: '#750505',
-        //justifyContent:'center',
         marginHorizontal: 5,
         textAlign: 'center'
     },

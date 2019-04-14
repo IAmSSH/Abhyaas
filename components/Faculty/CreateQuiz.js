@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ImageBackground, TextInput, Dimensions, TouchableOpacity } from 'react-native';
-//type Props = {};
+
 import bgimage from '../Images/1.jpeg';
 import { ScrollView } from 'react-native-gesture-handler';
 const { width: WIDTH } = Dimensions.get('window');
@@ -18,6 +18,7 @@ export default class App extends Component {
             optionC: null,
             optionD: null,
             ans: null,
+            isCorrect: false,
             paper: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
         }
     }
@@ -77,6 +78,7 @@ export default class App extends Component {
         paper[this.state.count - 1].optionB = this.state.optionB;
         paper[this.state.count - 1].optionC = this.state.optionC;
         paper[this.state.count - 1].optionD = this.state.optionD;
+        paper[this.state.count - 1].isCorrect = this.state.isCorrect;
         paper[this.state.count - 1].ans = this.state.ans;
 
         this.setState({
@@ -103,6 +105,7 @@ export default class App extends Component {
         paper[this.state.count - 1].optionB = this.state.optionB;
         paper[this.state.count - 1].optionC = this.state.optionC;
         paper[this.state.count - 1].optionD = this.state.optionD;
+        paper[this.state.count - 1].isCorrect = this.state.isCorrect;
         paper[this.state.count - 1].ans = this.state.ans;
 
         this.setState({
@@ -132,6 +135,8 @@ export default class App extends Component {
 
     render() {
         return (
+
+
 
             <ImageBackground
                 source={bgimage}
@@ -215,6 +220,7 @@ export default class App extends Component {
                             placeholderTextColor='white'
                             underlineColorAndroid='transparent'
                             value={this.state.ans}
+                            maxLength={1}
                         />
                     </View>
 

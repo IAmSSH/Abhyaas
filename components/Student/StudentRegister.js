@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ImageBackground, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-//type Props = {};
 import bgimage from '../Images/bg2.jpeg';
+
 const { width: WIDTH } = Dimensions.get('window');
 
 export default class StudentRegister extends Component {

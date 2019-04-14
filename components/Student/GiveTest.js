@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ImageBackground, TextInput, Dimensions, TouchableOpacity } from 'react-native';
-//type Props = {};
 import bgimage from '../Images/bg2.jpeg';
-import { ScrollView } from 'react-native-gesture-handler';
 import TimerCountdown from "react-native-timer-countdown";
 import * as firebase from 'firebase';
 import '@firebase/firestore'
 
 const { width: WIDTH } = Dimensions.get('window');
+
 export default class GiveTest extends Component {
 
     constructor() {
@@ -17,7 +16,7 @@ export default class GiveTest extends Component {
             group: null,
             testId: null,
             loaded: null,
-            questionPaper: null,    //it is an object which has {name and paper}, paper is an array of objects [{},{},{}...]
+            questionPaper: null,
             count: null,
             ans: null
         }
@@ -54,10 +53,11 @@ export default class GiveTest extends Component {
 
     handleAnswerPress = () => {
         let question = this.state.questionPaper.paper[this.state.count];
+
         if (this.state.ans.toLowerCase() === question.ans.toLowerCase()) {
             question.isCorrect = true;
         }
-        // console.log(question);
+
         let count = this.state.count + 1;
         this.setState({
             count
@@ -68,33 +68,23 @@ export default class GiveTest extends Component {
         const { db } = this.props.navigation.state.params;
         const { auth } = this.props.navigation.state.params;
 
-        let studentsAppeared;
-
-        // Update the studentsAppeared list in Question-Papers collection
         var listRef = db.collection("Question-Papers").where("name", "==", this.state.name);
         listRef.get()
             .then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
-                    doc.update({
-                        studentsAppeared: db.FieldValue.arrayUnion(auth.currentUser.uid)
-                    })
-                    // studentsAppeared = doc.data().studentsAppeared;
+                    db.collection("Question-Papers").doc(doc.id).update({
+                        studentsAppeared: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.uid)
+                    });
                 })
             })
             .catch((err) => console.log(err.message));
-
-
-        // update({
-        //     studentsAppeared: db.FieldValue.arrayUnion(auth.currentUser.uid)
-        // });
 
         db.collection("Users").doc(auth.currentUser.uid).collection("Tests").doc(this.state.testId).set({
             result: this.state.questionPaper,
             name: this.state.name,
             group: this.state.name.slice(0, this.state.name.indexOf('-'))
-
         })
-            .then(() => this.params.navigation.navigate("StudentLandingScreen"))
+            .then(() => this.props.navigation.navigate("StudentLandingScreen"))
             .catch((e) => console.log("Error: " + e));
     }
 
@@ -109,7 +99,6 @@ export default class GiveTest extends Component {
                 <View style={{ position: 'absolute', top: 20, left: 5 }}>
                     <TimerCountdown
                         initialMilliseconds={1000 * 60 * 12}
-                        // initialMilliseconds={1000 * 5}
                         onExpire={this.handleSubmit}
                         formatMilliseconds={(milliseconds) => {
                             const remainingSec = Math.round(milliseconds / 1000);
@@ -224,51 +213,6 @@ export default class GiveTest extends Component {
                             null
                         )
                 }
-
-                {/* <View style={styles.btnView}>
-                    <TouchableOpacity style={styles.btn}>
-                        <Text style={styles.text}>Submit & Next</Text>
-                    </TouchableOpacity>
-                </View> */}
-
-
-
-
-                {/* {this.state.loaded ? (
-                        <ScrollView>
-                            <Text>
-                                {this.state.questionPaper.paper[this.state.count].question}
-                            </Text>
-                            <Text>
-                                {this.state.questionPaper.paper[this.state.count].optionA}
-                            </Text>
-                            <Text>
-                                {this.state.questionPaper.paper[this.state.count].optionB}
-                            </Text>
-                            <Text>
-                                {this.state.questionPaper.paper[this.state.count].optionC}
-                            </Text>
-                            <Text>
-                                {this.state.questionPaper.paper[this.state.count].optionD}
-                            </Text>
-                            <TextInput maxLength={1} onChangeText={this.handleAnswer} placeholder="Answer" style={{ borderWidth: 1, borderColor: 'yellow' }} />
-                            {
-                                this.state.count < (2 - 1) ? (
-                                    <TouchableOpacity onPress={this.handleAnswerPress} >
-                                        <Text>Answer</Text>
-                                    </TouchableOpacity>
-                                ) : (
-                                        <TouchableOpacity onPress={this.handleSubmit} >
-                                            <Text>Submit</Text>
-                                        </TouchableOpacity>
-                                    )
-                            }
-                        </ScrollView>
-                    ) : (
-                            <Text>
-                                Please enter test ID
-                        </Text>
-                        )} */}
 
             </ImageBackground >
         );

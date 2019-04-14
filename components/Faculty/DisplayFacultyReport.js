@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ScrollView, ImageBackground, TextInput, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { Platform, StyleSheet, Text, View, ScrollView, ImageBackground, TextInput, Dimensions, TouchableOpacity, Image } from 'react-native';
 import bgimage from '../Images/bg2.jpeg';
-
 const { width: WIDTH } = Dimensions.get('window');
 
-export default class StudentReport extends Component {
+export default class DisplayFacultyReport extends Component {
 
     render() {
+        console.log(this.props.navigation.state.params.subjectReport);
         var results = this.props.navigation.state.params.subjectReport.map(result => {
             return (
                 <View style={styles.displayTable}>
@@ -14,7 +14,7 @@ export default class StudentReport extends Component {
                         <Text style={styles.text}>{result.name}</Text>
                     </View>
                     <View style={styles.marks}>
-                        <Text style={styles.text}>{result.marksObtained}/10</Text>
+                        <Text style={styles.text}>{result.marks}/10</Text>
                     </View>
                 </View>
             )

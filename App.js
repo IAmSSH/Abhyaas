@@ -1,5 +1,4 @@
 import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
 import StudentLanding from './components/Student/StudentLanding';
 import FacultyLanding from './components/Faculty/FacultyLanding';
 import StudentLogin from './components/Student/StudentLogin';
@@ -14,8 +13,9 @@ import StudentRegister from './components/Student/StudentRegister';
 import FacultyRegister from './components/Faculty/FacultyRegister';
 import StudentReport from './components/Student/StudentReport';
 import FacultyReport from './components/Faculty/FacultyReport';
-import TestID from './components/Student/TestID';
+import GetTestId from './components/Faculty/GetTestId';
 import ViewStudentReport from './components/Student/ViewStudentReport';
+import DisplayFacultyReport from './components/Faculty/DisplayFacultyReport';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import * as firebase from 'firebase';
 import '@firebase/firestore'
@@ -37,10 +37,11 @@ const AppNavigator = createStackNavigator(
         StudentReportScreen: StudentReport,
         FacultyReportScreen: FacultyReport,
         ViewStudentReportScreen: ViewStudentReport,
-        TestIDScreen: TestID
+        DisplayFacultyReportScreen: DisplayFacultyReport,
+        GetTestIdScreen: GetTestId
     },
     {
-        initialRouteName: "ForgotPasswordScreen",
+        initialRouteName: "HomepageScreen",
         defaultNavigationOptions: {
             headerStyle: {
                 backgroundColor: '#494949',

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ImageBackground, TextInput, Dimensions, TouchableOpacity, Image } from 'react-native';
 import bgimage from '../Images/bg2.jpeg';
 import eye from '../Images/eye.png';
+
 const { width: WIDTH } = Dimensions.get('window');
+
 export default class StudentReport extends Component {
 
     constructor() {
@@ -11,10 +13,6 @@ export default class StudentReport extends Component {
             reports: []
         }
     }
-
-    /**
-     * reports is of the form [{result:{name:, paper:[{ans, que, optionA, isCOrrect},{},{}...10]}},{},{}]
-     */
 
     componentDidMount() {
         const { db } = this.props.navigation.state.params;
@@ -26,9 +24,7 @@ export default class StudentReport extends Component {
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach(doc => {
-                    // ********Data is retrieved correctly*************
                     reports.push(doc.data());
-                    // console.log(reports);
                     this.setState({ reports });
                 })
             })

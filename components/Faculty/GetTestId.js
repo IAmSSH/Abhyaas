@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button, ImageBackground, TextInput, Dimensions, TouchableOpacity } from 'react-native';
-import bgimage from './Images/1.jpeg';
+import { StyleSheet, Text, View, Button, ImageBackground, TextInput, Dimensions, TouchableOpacity } from 'react-native';
+import bgimage from '../Images/1.jpeg';
 
 const { width: WIDTH } = Dimensions.get('window');
 
@@ -9,22 +9,27 @@ export default class ForgotPassword extends Component {
     constructor() {
         super();
         this.state = {
-            email: null
+            name: null,
+            id: null,
+            loaded: false
         }
     }
 
-    handleEmailChange = (email) => {
-        this.setState({ email })
+    handleNameChange = (name) => {
+        this.setState({ name })
     }
 
     handleEnter = () => {
-        const { auth } = this.props.navigation.state.params;
-
-        auth.sendPasswordResetEmail(this.state.email).then(function () {
-            // Email sent.
-        }).catch(function (error) {
-            // An error happened.
-        });
+        const { db } = this.props.navigation.state.params;
+        db.collection("Question-Papers").where('name', '==', this.state.name).get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach(doc => {
+                    this.setState({
+                        id: doc.id,
+                        loaded: true
+                    })
+                })
+            })
     }
 
     render() {
@@ -36,18 +41,26 @@ export default class ForgotPassword extends Component {
             >
                 <View>
                     <Text style={styles.text}>
-                        Enter your E-Mail
+                        Enter name of the test
                     </Text>
                     <TextInput
                         style={styles.input1}
-                        placeholder='E-Mail ID'
+                        placeholder='Test name'
                         placeholderTextColor='#a5a9af'
                         placholderTextAlign='center'
                         underlineColorAndroid='transparent'
-                        onChangeText={this.handleEmailChange}
+                        onChangeText={this.handleNameChange}
                     />
                     <Button title="Enter" onPress={this.handleEnter} />
                 </View>
+
+                {
+                    this.state.loaded ? (
+                        <Text style={{ fontSize: 20, color: 'white', marginTop: 15 }}>{this.state.id}</Text>
+                    ) : (
+                            null
+                        )
+                }
 
             </ImageBackground>
         );

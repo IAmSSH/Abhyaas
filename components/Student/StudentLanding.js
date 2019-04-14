@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
         marginRight: 230,
         justifyContent: 'center',
         marginTop: 100,
-        // backgroundColor: '#B10707',
         alignItems: 'center'
     },
     btn: {
@@ -111,7 +110,6 @@ const styles = StyleSheet.create({
         marginLeft: 230,
         flexDirection: 'row',
         justifyContent: 'center',
-        // backgroundColor: '#B10707',
         alignItems: 'center'
     },
     btn3: {
@@ -132,7 +130,6 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         backgroundColor: '#750505',
-        //justifyContent:'center',
         marginHorizontal: 5,
         textAlign: 'center'
     },

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ImageBackground, TextInput, Dimensions, TouchableOpacity } from 'react-native';
-//type Props = {};
 import bgimage from '../Images/bg.jpeg';
-const { width: WIDTH } = Dimensions.get('window');
 
+const { width: WIDTH } = Dimensions.get('window');
 
 export default class FacultyLogin extends Component {
 
