@@ -3,7 +3,55 @@ import { Platform, StyleSheet, Text, View, ImageBackground, TextInput, Dimension
 //type Props = {};
 import bgimage from '../Images/bg2.jpeg';
 const { width: WIDTH } = Dimensions.get('window');
+
 export default class StudentRegister extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            name: null,
+            branch: null,
+            college: null,
+            username: null,
+            password: null,
+        }
+    }
+
+    handleName = (name) => {
+        this.setState({ name });
+    }
+
+    handleBranch = (branch) => {
+        this.setState({ branch });
+    }
+
+    handleCollege = (college) => {
+        this.setState({ college });
+    }
+
+    handleUsername = (username) => {
+        this.setState({ username });
+    }
+
+    handlePassword = (password) => {
+        this.setState({ password });
+    }
+
+    handleSubmit = () => {
+        const { db, auth } = this.props.navigation.state.params;
+
+        auth.createUserWithEmailAndPassword(this.state.username, this.state.password)
+            .then(() => {
+                db.collection("Users").doc(auth.currentUser.uid).set({
+                    name: this.state.name,
+                    branch: this.state.branch,
+                    college: this.state.college,
+                });
+                this.props.navigation.navigate("StudentLandingScreen");
+            })
+            .catch((err) => console.log(err.message));
+    }
+
     render() {
         return (
             <ImageBackground
@@ -21,15 +69,7 @@ export default class StudentRegister extends Component {
                             placeholder='Name'
                             placeholderTextColor='white'
                             underlineColorAndroid='transparent'
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Phone'
-                            placeholderTextColor='white'
-                            secureTextEntry={true}
-                            underlineColorAndroid='transparent'
+                            onChangeText={this.handleName}
                         />
                     </View>
                     <View>
@@ -38,6 +78,7 @@ export default class StudentRegister extends Component {
                             placeholder='Branch'
                             placeholderTextColor='white'
                             underlineColorAndroid='transparent'
+                            onChangeText={this.handleBranch}
                         />
                     </View>
                     <View>
@@ -47,6 +88,7 @@ export default class StudentRegister extends Component {
                             placeholderTextColor='white'
                             secureTextEntry={true}
                             underlineColorAndroid='transparent'
+                            onChangeText={this.handleCollege}
                         />
                     </View>
                     <View>
@@ -55,6 +97,7 @@ export default class StudentRegister extends Component {
                             placeholder='Username'
                             placeholderTextColor='white'
                             underlineColorAndroid='transparent'
+                            onChangeText={this.handleUsername}
                         />
                     </View>
                     <View>
@@ -64,9 +107,10 @@ export default class StudentRegister extends Component {
                             placeholderTextColor='white'
                             secureTextEntry={true}
                             underlineColorAndroid='transparent'
+                            onChangeText={this.handlePassword}
                         />
                     </View>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity style={styles.btn} onPress={this.handleSubmit}>
                         <Text style={styles.text1}>REGISTER</Text>
                     </TouchableOpacity>
                 </ScrollView>

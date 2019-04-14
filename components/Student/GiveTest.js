@@ -4,6 +4,8 @@ import { Platform, StyleSheet, Text, View, ImageBackground, TextInput, Dimension
 import bgimage from '../Images/bg2.jpeg';
 import { ScrollView } from 'react-native-gesture-handler';
 import TimerCountdown from "react-native-timer-countdown";
+import * as firebase from 'firebase';
+import '@firebase/firestore'
 
 const { width: WIDTH } = Dimensions.get('window');
 export default class GiveTest extends Component {
@@ -63,11 +65,28 @@ export default class GiveTest extends Component {
     }
 
     handleSubmit = () => {
-        // console.log(this.state.questionPaper);
-        // store questionPaper in users DB and revrt back to choice screen.
-
         const { db } = this.props.navigation.state.params;
         const { auth } = this.props.navigation.state.params;
+
+        let studentsAppeared;
+
+        // Update the studentsAppeared list in Question-Papers collection
+        var listRef = db.collection("Question-Papers").where("name", "==", this.state.name);
+        listRef.get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach(doc => {
+                    doc.update({
+                        studentsAppeared: db.FieldValue.arrayUnion(auth.currentUser.uid)
+                    })
+                    // studentsAppeared = doc.data().studentsAppeared;
+                })
+            })
+            .catch((err) => console.log(err.message));
+
+
+        // update({
+        //     studentsAppeared: db.FieldValue.arrayUnion(auth.currentUser.uid)
+        // });
 
         db.collection("Users").doc(auth.currentUser.uid).collection("Tests").doc(this.state.testId).set({
             result: this.state.questionPaper,
@@ -87,10 +106,10 @@ export default class GiveTest extends Component {
                 resizeMode="stretch"
             >
 
-                {/* <View style={{ position: 'absolute', top: 20, left: 5 }}> */}
-                {/* <TimerCountdown
-                        // initialMilliseconds={1000 * 60 * 10}
-                        initialMilliseconds={1000 * 5}
+                <View style={{ position: 'absolute', top: 20, left: 5 }}>
+                    <TimerCountdown
+                        initialMilliseconds={1000 * 60 * 12}
+                        // initialMilliseconds={1000 * 5}
                         onExpire={this.handleSubmit}
                         formatMilliseconds={(milliseconds) => {
                             const remainingSec = Math.round(milliseconds / 1000);
@@ -105,59 +124,117 @@ export default class GiveTest extends Component {
                         }}
                         allowFontScaling={true}
                         style={{ color: 'white', fontSize: 25 }}
-                    /> */}
-                {/* </View> */}
-
-                <View style={{ marginTop: 100, width: '80%', alignItems: 'center', marginBottom: 15, paddingBottom: 20 }}>
-                    <TextInput
-                        placeholder="Test ID"
-                        onChangeText={this.handleTestId}
-                        style={{ backgroundColor: 'grey', width: '100%', marginBottom: 10, textAlign: 'center' }}
-                        placeholderTextColor='white'
-                    // style={styles.text1}
                     />
-                    <TouchableOpacity onPress={this.handleIdSubmit}
-                        style={{ backgroundColor: 'black', width: '40%', height: 40, color: 'white', fontSize: 18, justifyContent: 'center', borderRadius: 10 }}
-                    >
-                        <Text
-                            style={{ textAlign: 'center', color: 'white' }}
-                        >Enter</Text>
-                    </TouchableOpacity>
                 </View>
 
-                <ScrollView>
+                {
+                    !this.state.loaded ? (
+                        <View>
+                            <TextInput
+                                placeholder="TestID"
+                                onChangeText={this.handleTestId}
+                            />
 
-                    <View style={{ backgroundColor: '#770A0A', width: '100%', marginVertical: 3, width: WIDTH }}>
-                        <Text style={{ fontSize: 20, color: 'white', marginHorizontal: 4 }} >
-                            What is xyz?
-                        </Text>
-                    </View>
+                            <TouchableOpacity style={styles.btn} onPress={this.handleIdSubmit} >
+                                <Text style={styles.text}>Submit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ) : (null)
+                }
 
-                    <View style={{ backgroundColor: '#302E2E', width: '100%', marginVertical: 3, width: WIDTH }}>
-                        <Text style={{ fontSize: 20, color: 'white', marginHorizontal: 4 }}>
-                            brbvlwierbvil
-                        </Text>
-                        <Text style={{ fontSize: 20, color: 'white', marginHorizontal: 4 }}>
-                            brbvlwierbvil
-                        </Text>
-                        <Text style={{ fontSize: 20, color: 'white', marginHorizontal: 4 }}>
-                            brbvlwierbvil
-                        </Text>
-                        <Text style={{ fontSize: 20, color: 'white', marginHorizontal: 4 }}>
-                            brbvlwierbvil
-                        </Text>
+                {
+                    this.state.loaded ? (
+                        <View style={styles.quiz}>
+                            <View style={styles.question}>
+                                <Text style={styles.text1}>Q: {this.state.questionPaper.paper[this.state.count].question}?</Text>
+                            </View>
+                            <View style={styles.options}>
+                                <View style={styles.options1}>
+                                    <View style={styles.options3}>
+                                        <Text style={styles.text1}>(A)</Text>
+                                    </View>
+                                    <View style={styles.options3}>
+                                        <Text style={styles.text1}>(B)</Text>
+                                    </View>
+                                    <View style={styles.options3}>
+                                        <Text style={styles.text1}>(C)</Text>
+                                    </View>
+                                    <View style={styles.options3}>
+                                        <Text style={styles.text1}>(D)</Text>
+                                    </View>
+                                </View>
+                                <View style={styles.options2}>
+                                    <View style={styles.options3}>
+                                        <Text style={styles.options4}>{this.state.questionPaper.paper[this.state.count].optionA}</Text>
+                                    </View>
+                                    <View style={styles.options3}>
+                                        <Text style={styles.options4}>{this.state.questionPaper.paper[this.state.count].optionB}</Text>
+                                    </View>
+                                    <View style={styles.options3}>
+                                        <Text style={styles.options4}>{this.state.questionPaper.paper[this.state.count].optionC}</Text>
+                                    </View>
+                                    <View style={styles.options3}>
+                                        <Text style={styles.options4}>{this.state.questionPaper.paper[this.state.count].optionD}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    ) : (
+                            null
+                        )
+                }
 
-                        <TextInput maxLength={1} onChangeText={this.handleAnswer} placeholder="Answer" style={{ borderWidth: 1, borderColor: 'yellow' }} />
+                {
+                    this.state.loaded ? (
+                        <View>
+                            <TextInput
+                                style={styles.input1}
+                                placeholder='Your Answer'
+                                placeholderTextColor='white'
+                                underlineColorAndroid='transparent'
+                                maxLength={1}
+                                onChangeText={this.handleAnswer}
+                            />
+                        </View>
+                    ) : (
+                            null
+                        )
+                }
 
-                        <TouchableOpacity onPress={this.handleAnswerPress} >
-                            <Text>Answer</Text>
-                        </TouchableOpacity>
-                    </View>
+                {
+                    this.state.loaded ? (
+
+                        <View style={styles.btnView}>
+
+                            {
+                                this.state.count < (2 - 1) ? (
+                                    <TouchableOpacity style={styles.btn} onPress={this.handleAnswerPress}>
+                                        <Text style={styles.text}>Next</Text>
+                                    </TouchableOpacity>
+
+                                ) : (
+                                        <TouchableOpacity style={styles.btn} onPress={this.handleSubmit}>
+                                            <Text style={styles.text}>Submit</Text>
+                                        </TouchableOpacity>
+                                    )
+                            }
+
+                        </View>
+                    ) : (
+                            null
+                        )
+                }
+
+                {/* <View style={styles.btnView}>
+                    <TouchableOpacity style={styles.btn}>
+                        <Text style={styles.text}>Submit & Next</Text>
+                    </TouchableOpacity>
+                </View> */}
 
 
 
 
-                    {/* {this.state.loaded ? (
+                {/* {this.state.loaded ? (
                         <ScrollView>
                             <Text>
                                 {this.state.questionPaper.paper[this.state.count].question}
@@ -192,9 +269,8 @@ export default class GiveTest extends Component {
                                 Please enter test ID
                         </Text>
                         )} */}
-                </ScrollView>
 
-            </ImageBackground>
+            </ImageBackground >
         );
     }
 }

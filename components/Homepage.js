@@ -21,23 +21,32 @@ var db = firebase.firestore();
 
 export default class Homepage extends Component {
 
-    // static navigationOptions = {
-    //     title: 'Home',
-    //     headerStyle: {
-    //         backgroundColor: '#494949',
-    //     },
-    //     headerTintColor: '#fff',
-    //     headerTitleStyle: {
-    //         fontWeight: 'bold',
-    //     },
-    // };
+    logout = () => {
+        auth.signOut()
+            .then(() => this.params.navigation.navigate("HomepageScreen"))
+            .catch((err) => console.log(err));
+    }
+
+    createUser = (details) => {
+
+        auth.createUserWithEmailAndPassword(details.username, details.password)
+            .then(() => {
+                db.collection("Teachers").doc(auth.currentUser.uid).set({
+                    name: details.name,
+                    branch: details.branch,
+                    subject: details.subject,
+                });
+                this.props.navigation.navigate("FacultyLandingScreen");
+            })
+            .catch((err) => console.log(err.message));
+    }
 
     loginPress = () => {
         this.props.navigation.navigate("SignInChoiceScreen", { auth: auth, db: db });
     }
 
     registerPress = () => {
-        this.props.navigation.navigate("RegisterChoiceScreen", { auth: auth, db: db });
+        this.props.navigation.navigate("RegisterChoiceScreen", { createUser: this.createUser, auth: auth, db: db });
     }
 
     render() {

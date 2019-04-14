@@ -120,6 +120,8 @@ export default class App extends Component {
         let upload = {};
         upload.paper = this.state.paper;
         upload.name = this.state.name;
+        upload.studentsAppeared = [];
+        // add list of appeared students to 'upload'
         db.collection('Question-Papers').add(upload)
             .then(() => console.log("Successfully Written"))
             .catch((e) => console.log(e.message()));

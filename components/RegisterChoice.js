@@ -5,6 +5,13 @@ import bgimage from './Images/1.jpeg';
 const { width: WIDTH } = Dimensions.get('window');
 export default class Homepage2 extends Component {
 
+    registerAsStudent = () => {
+        const { db } = this.props.navigation.state.params;
+        const { auth } = this.props.navigation.state.params;
+
+        this.props.navigation.navigate("StudentRegisterScreen", { auth: auth, db: db });
+    }
+
     render() {
         return (
             <ImageBackground
@@ -16,10 +23,12 @@ export default class Homepage2 extends Component {
                     <Text style={styles.text}>
                         Sign Up
                     </Text>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity style={styles.btn} onPress={this.registerAsStudent}>
                         <Text style={styles.text}>Student</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity
+                        style={styles.btn}
+                        onPress={() => this.props.navigation.navigate("FacultyRegisterScreen", { createUser: this.props.navigation.state.params.createUser, auth: this.props.navigation.state.params.auth, db: this.props.navigation.state.params.db })}>
                         <Text style={styles.text}>Teacher</Text>
                     </TouchableOpacity>
                 </View>

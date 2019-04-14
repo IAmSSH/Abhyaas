@@ -1,9 +1,45 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, ImageBackground, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-//type Props = {};
 import bgimage from '../Images/bg2.jpeg';
 const { width: WIDTH } = Dimensions.get('window');
+
 export default class FacultyRegister extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            name: null,
+            branch: null,
+            subject: null,
+            username: null,
+            password: null,
+        }
+    }
+
+    handleName = (name) => {
+        this.setState({ name });
+    }
+
+    handleBranch = (branch) => {
+        this.setState({ branch });
+    }
+
+    handleSubject = (subject) => {
+        this.setState({ subject });
+    }
+
+    handleUsername = (username) => {
+        this.setState({ username });
+    }
+
+    handlePassword = (password) => {
+        this.setState({ password });
+    }
+
+    handleSubmit = () => {
+        this.props.navigation.state.params.createUser(this.state);
+    }
+
     render() {
         return (
             <ImageBackground
@@ -21,15 +57,7 @@ export default class FacultyRegister extends Component {
                             placeholder='Name'
                             placeholderTextColor='white'
                             underlineColorAndroid='transparent'
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Phone'
-                            placeholderTextColor='white'
-                            secureTextEntry={true}
-                            underlineColorAndroid='transparent'
+                            onChangeText={this.handleName}
                         />
                     </View>
                     <View>
@@ -38,6 +66,7 @@ export default class FacultyRegister extends Component {
                             placeholder='Branch'
                             placeholderTextColor='white'
                             underlineColorAndroid='transparent'
+                            onChangeText={this.handleBranch}
                         />
                     </View>
                     <View>
@@ -45,8 +74,8 @@ export default class FacultyRegister extends Component {
                             style={styles.input}
                             placeholder='Subject'
                             placeholderTextColor='white'
-                            secureTextEntry={true}
                             underlineColorAndroid='transparent'
+                            onChangeText={this.handleSubject}
                         />
                     </View>
                     <View>
@@ -55,6 +84,7 @@ export default class FacultyRegister extends Component {
                             placeholder='Username'
                             placeholderTextColor='white'
                             underlineColorAndroid='transparent'
+                            onChangeText={this.handleUsername}
                         />
                     </View>
                     <View>
@@ -64,9 +94,10 @@ export default class FacultyRegister extends Component {
                             placeholderTextColor='white'
                             secureTextEntry={true}
                             underlineColorAndroid='transparent'
+                            onChangeText={this.handlePassword}
                         />
                     </View>
-                    <TouchableOpacity style={styles.btn}>
+                    <TouchableOpacity style={styles.btn} onPress={this.handleSubmit} >
                         <Text style={styles.text1}>REGISTER</Text>
                     </TouchableOpacity>
                 </ScrollView>

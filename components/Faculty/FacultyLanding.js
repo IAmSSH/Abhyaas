@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, Dimensions, ImageBackground, TouchableOpacity, Image } from 'react-native';
 const { width: WIDTH } = Dimensions.get('window');
-import bgimage from '../Images/bg.jpeg';
+import bgimage from '../Images/bg2.jpeg';
 import books from '../Images/books.png';
 import test from '../Images/test.png';
 import que from '../Images/quiz.png';
@@ -14,6 +14,13 @@ export default class FacultyLanding extends Component {
         const { auth } = this.props.navigation.state.params;
 
         this.props.navigation.navigate("CreateQuizScreen", { db: db, auth: auth });
+    }
+
+    handleFacultyReport = () => {
+        const { db } = this.props.navigation.state.params;
+        const { auth } = this.props.navigation.state.params;
+
+        this.props.navigation.navigate("FacultyReportScreen", { db: db, auth: auth });
     }
 
     handleLogout = () => {
@@ -44,7 +51,7 @@ export default class FacultyLanding extends Component {
                 </View>
                 <View style={styles.btn}>
                     <View>
-                        <TouchableOpacity style={styles.op}>
+                        <TouchableOpacity style={styles.op} onPress={this.handleFacultyReport} >
                             <Image
                                 style={styles.book1}
                                 source={report}

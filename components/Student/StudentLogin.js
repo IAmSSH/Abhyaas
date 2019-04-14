@@ -41,6 +41,14 @@ export default class StudentLogin extends Component {
             }));
     }
 
+
+
+    handleForgotPassword = () => {
+        const { auth } = this.props.navigation.state.params;
+
+        this.props.navigation.navigate("ForgotPasswordScreen", { auth: auth });
+    }
+
     render() {
         return (
             <ImageBackground
@@ -72,7 +80,7 @@ export default class StudentLogin extends Component {
                     <Text style={styles.text1}>Login</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn}>
-                    <Text style={styles.text1}>Forgot Password?</Text>
+                    <Text style={styles.text1} onPress={this.handleForgotPassword}>Forgot Password?</Text>
                 </TouchableOpacity>
             </ImageBackground>
         );
