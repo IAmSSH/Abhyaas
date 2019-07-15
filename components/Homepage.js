@@ -7,12 +7,11 @@ import * as firebase from 'firebase';
 import '@firebase/firestore'
 
 var config = {
-    apiKey: "AIzaSyByel6h2uM_gsFsFpjtIu0itabzpUmMaSE",
-    authDomain: "abhyas-ca185.firebaseapp.com",
-    databaseURL: "https://abhyas-ca185.firebaseio.com",
-    projectId: "abhyas-ca185",
-    storageBucket: "abhyas-ca185.appspot.com",
-    messagingSenderId: "171618606052"
+    /*
+        Configuration data...
+        API key etc.
+    
+    */
 };
 firebase.initializeApp(config);
 
